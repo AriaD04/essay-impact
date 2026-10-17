@@ -277,7 +277,6 @@ const D = {
     "about.team.t": "Made by the Coral Quest Group",
     "about.leader": "Team Leader",
     "about.member": "Member",
-    "about.models": "Real 3D models installed: {n} of {t}.",
   },
 
   id: {
@@ -541,7 +540,6 @@ const D = {
     "about.team.t": "Dibuat oleh Kelompok Coral Quest",
     "about.leader": "Ketua Kelompok",
     "about.member": "Anggota",
-    "about.models": "Model 3D asli terpasang: {n} dari {t}.",
   },
 };
 
