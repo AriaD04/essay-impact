@@ -30,8 +30,7 @@ let mode = "quick";
 const scoreKey = (id) => `${mode}:${id}`;
 
 function show(screen) {
-  for (const s of ["title", "map", "result"])
-    $(`#screen-${s}`).hidden = s !== screen;
+  for (const s of ["title", "map", "result"]) $(`#screen-${s}`).hidden = s !== screen;
 }
 
 // ---------- latar menu: terumbu yang berputar pelan ----------
@@ -45,15 +44,7 @@ async function menuBackdrop() {
   stage.controls.autoRotate = true;
   stage.controls.autoRotateSpeed = 0.4;
   await reefDecor(stage, 0, 0, { radius: 5, corals: 12, rocks: 4, weeds: 5 });
-  for (const id of [
-    "ikan_kakatua",
-    "ikan_baronang",
-    "ikan_badut",
-    "ikan_kerapu",
-    "ikan_kakatua",
-    "ikan_baronang",
-  ])
-    await swimmer(stage, id, { r: 4, y: 1.8, speed: 0.5 });
+  for (const id of ["ikan_kakatua", "ikan_baronang", "ikan_badut", "ikan_kerapu", "ikan_kakatua", "ikan_baronang"]) await swimmer(stage, id, { r: 4, y: 1.8, speed: 0.5 });
   await swimmer(stage, "penyu_hijau", { r: 6, y: 3, speed: 0.35 });
 }
 
@@ -95,8 +86,7 @@ function renderResult() {
   const path = PATHS[mode];
   const vals = path.map((id) => scores[scoreKey(id)] || 0);
   const avg = Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
-  const title =
-    avg >= 85 ? "res.t.expert" : avg >= 65 ? "res.t.mid" : "res.t.new";
+  const title = avg >= 85 ? "res.t.expert" : avg >= 65 ? "res.t.mid" : "res.t.new";
   audio.sfx("complete");
   $("#result-body").innerHTML = `
     <div class="badge">${T(mode === "class" ? "res.badge.class" : "res.badge.quick")}</div>
@@ -112,20 +102,11 @@ function renderResult() {
       <button class="btn primary" id="btn-pledge">${T("res.save")}</button>
       <button class="btn ghost" id="btn-again">${T("res.again")}</button>
     </div>`;
-  document
-    .querySelectorAll(".pledge input")
-    .forEach((c) => (c.onchange = () => audio.sfx(c.checked ? "pop" : "undo")));
+  document.querySelectorAll(".pledge input").forEach((c) => (c.onchange = () => audio.sfx(c.checked ? "pop" : "undo")));
   $("#btn-pledge").onclick = () => {
-    const n = [...document.querySelectorAll(".pledge input")].filter(
-      (c) => c.checked,
-    ).length;
-    if (!n) {
-      audio.sfx("wrong");
-      return ui.toast(T("res.none"), "bad");
-    }
-    const p = progress.load();
-    p.pledges = (p.pledges || 0) + n;
-    progress.save(p);
+    const n = [...document.querySelectorAll(".pledge input")].filter((c) => c.checked).length;
+    if (!n) { audio.sfx("wrong"); return ui.toast(T("res.none"), "bad"); }
+    const p = progress.load(); p.pledges = (p.pledges || 0) + n; progress.save(p);
     audio.sfx("found");
     ui.toast(T("res.thanks", { n }), "good", 3000);
   };
@@ -140,17 +121,7 @@ function about() {
     html: `<p>${T("about.intro")}</p>
       <h3>${T("about.reef.t")}</h3>${T("about.reef")}
       <h3>${T("about.team.t")}</h3>
-      <div class="team">${TEAM.map(
-        (m) =>
-          `<div class="member"><div class="avatar">${m.name
-            .split(" ")
-            .map((w) => w[0])
-            .slice(0, 2)
-            .join(
-              "",
-            )}</div><div><div class="m-name">${m.name}</div><div class="m-meta">${m.nim} · ${T(m.leader ? "about.leader" : "about.member")}</div></div></div>`,
-      ).join("")}</div>
-       <div class="team">...</div>`,
+      <div class="team">${TEAM.map((m) => `<div class="member"><div class="avatar">${m.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}</div><div><div class="m-name">${m.name}</div><div class="m-meta">${m.nim} · ${T(m.leader ? "about.leader" : "about.member")}</div></div></div>`).join("")}</div>`,
     buttons: [{ label: T("btn.close"), value: true, cls: "primary" }],
   });
 }
@@ -158,16 +129,20 @@ function about() {
 // ---------- bahasa & suara ----------
 function syncLangUI() {
   const l = getLang();
-  document
-    .querySelectorAll("[data-lang]")
-    .forEach((b) =>
-      b.setAttribute("aria-pressed", String(b.dataset.lang === l)),
-    );
+  document.querySelectorAll("[data-lang]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === l)));
   $("#sys-lang .code").textContent = l === "en" ? "EN" : "ID";
 }
 function syncAudioUI() {
   $("#sys-music").classList.toggle("off", !audio.settings.music);
   $("#sys-sfx").classList.toggle("off", !audio.settings.sfx);
+  for (const k of ["music", "sfx"]) {
+    const v = audio.settings[k];
+    const range = $(`#vol-${k}`);
+    if (range && +range.value !== v) range.value = v;
+    if (range) range.style.setProperty("--p", v + "%");
+    const out = $(`#vol-${k}-val`); if (out) out.textContent = v;
+    const mute = $(`#vol-${k}-mute`); if (mute) { mute.textContent = v ? (k === "music" ? "🎵" : "🔊") : "🔇"; mute.classList.toggle("off", !v); }
+  }
 }
 function changeLang(l) {
   if (l === getLang()) return;
@@ -176,47 +151,35 @@ function changeLang(l) {
 }
 onLang(syncLangUI);
 audio.onChange(syncAudioUI);
-document
-  .querySelectorAll("[data-lang]")
-  .forEach((b) => (b.onclick = () => changeLang(b.dataset.lang)));
+document.querySelectorAll("[data-lang]").forEach((b) => (b.onclick = () => changeLang(b.dataset.lang)));
 $("#sys-lang").onclick = () => changeLang(getLang() === "en" ? "id" : "en");
-$("#sys-music").onclick = () => {
-  audio.unlock();
-  audio.toggle("music");
-};
-$("#sys-sfx").onclick = () => {
-  audio.unlock();
-  audio.toggle("sfx");
-};
+// panel volume 0–100
+const volPanel = $("#vol-panel");
+const openVol = (e) => { e.stopPropagation(); audio.unlock(); volPanel.hidden = !volPanel.hidden; syncAudioUI(); };
+$("#sys-music").onclick = openVol;
+$("#sys-sfx").onclick = openVol;
+document.addEventListener("pointerdown", (e) => { if (!volPanel.hidden && !volPanel.contains(e.target) && !e.target.closest("#sys")) volPanel.hidden = true; });
+$("#vol-close").onclick = () => (volPanel.hidden = true);
+const lastVol = { music: audio.settings.music || 70, sfx: audio.settings.sfx || 85 };
+for (const k of ["music", "sfx"]) {
+  const range = $(`#vol-${k}`);
+  range.oninput = () => { audio.setVolume(k, +range.value); if (+range.value) lastVol[k] = +range.value; };
+  if (k === "sfx") range.onchange = () => audio.sfx("correct"); // bunyi contoh setelah slider dilepas
+  $(`#vol-${k}-mute`).onclick = () => {
+    audio.setVolume(k, audio.settings[k] ? 0 : lastVol[k]);
+    if (k === "sfx" && audio.settings.sfx) audio.sfx("pop");
+  };
+}
 syncLangUI();
 syncAudioUI();
 
 // ---------- event ----------
-document.querySelectorAll(".mode").forEach(
-  (b) =>
-    (b.onclick = () => {
-      mode = b.dataset.mode;
-      renderMap();
-      show("map");
-    }),
-);
-document
-  .querySelectorAll("[data-go=title]")
-  .forEach((b) => (b.onclick = () => show("title")));
+document.querySelectorAll(".mode").forEach((b) => (b.onclick = () => { mode = b.dataset.mode; renderMap(); show("map"); }));
+document.querySelectorAll("[data-go=title]").forEach((b) => (b.onclick = () => show("title")));
 $("#btn-about").onclick = about;
-$("#btn-finish").onclick = () => {
-  renderResult();
-  show("result");
-};
+$("#btn-finish").onclick = () => { renderResult(); show("result"); };
 $("#btn-home").onclick = async () => {
-  const ok = await ui.dialog({
-    title: T("exit.title"),
-    html: `<p>${T("exit.body")}</p>`,
-    buttons: [
-      { label: T("exit.stay"), value: false, cls: "ghost" },
-      { label: T("exit.leave"), value: true, cls: "coral" },
-    ],
-  });
+  const ok = await ui.dialog({ title: T("exit.title"), html: `<p>${T("exit.body")}</p>`, buttons: [{ label: T("exit.stay"), value: false, cls: "ghost" }, { label: T("exit.leave"), value: true, cls: "coral" }] });
   if (ok) location.reload();
 };
 
@@ -233,5 +196,4 @@ $("#btn-home").onclick = async () => {
 })();
 
 // offline (PWA)
-if ("serviceWorker" in navigator && location.protocol === "https:")
-  navigator.serviceWorker.register("sw.js").catch(() => {});
+if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});

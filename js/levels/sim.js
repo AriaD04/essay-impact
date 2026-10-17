@@ -11,7 +11,7 @@ export const ACTIONS = {
   tambat:  { icon: "⚓", cost: 2 },
   edukasi: { icon: "📢", cost: 2 },
 };
-export const BUDGET = 12;
+export const BUDGET = 24;
 export const TRASH_COUNT = 5;
 export const SPOTS = 4;
 

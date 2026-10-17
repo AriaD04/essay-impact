@@ -40,6 +40,23 @@
     <button id="sys-sfx" class="sys-btn" data-i18n-title="sys.sfx">🔊</button>
   </div>
 
+  <!-- Panel volume 0–100 -->
+  <div id="vol-panel" hidden role="dialog" aria-labelledby="vol-title">
+    <div class="vol-head"><b id="vol-title" data-i18n="vol.title">Volume</b><button id="vol-close" class="vol-x" aria-label="Close">✕</button></div>
+    <div class="vol-row">
+      <button id="vol-music-mute" class="vol-mute" data-i18n-title="vol.mute">🎵</button>
+      <label for="vol-music" data-i18n="vol.music">Music</label>
+      <output id="vol-music-val">70</output>
+      <input type="range" id="vol-music" min="0" max="100" step="1" value="70" />
+    </div>
+    <div class="vol-row">
+      <button id="vol-sfx-mute" class="vol-mute" data-i18n-title="vol.mute">🔊</button>
+      <label for="vol-sfx" data-i18n="vol.sfx">Sound effects</label>
+      <output id="vol-sfx-val">85</output>
+      <input type="range" id="vol-sfx" min="0" max="100" step="1" value="85" />
+    </div>
+  </div>
+
   <!-- Layar judul -->
   <section id="screen-title" class="screen" hidden>
     <div class="title-wrap">

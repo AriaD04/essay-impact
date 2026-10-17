@@ -40,8 +40,15 @@ class AudioSys {
   constructor() {
     this.ctx = null;
     this.mood = "menu";
-    this.settings = { music: true, sfx: true };
-    try { Object.assign(this.settings, JSON.parse(localStorage.getItem(STORE)) || {}); } catch {}
+    // volume 0–100 (0 = mati)
+    this.settings = { music: 70, sfx: 85 };
+    try {
+      const s = JSON.parse(localStorage.getItem(STORE)) || {};
+      for (const k of ["music", "sfx"]) {
+        if (typeof s[k] === "number") this.settings[k] = Math.max(0, Math.min(100, s[k]));
+        else if (s[k] === false) this.settings[k] = 0; // pengaturan lama (nyala/mati)
+      }
+    } catch {}
     this.step = 0;
     this.files = {};
     this.listeners = new Set();
@@ -64,11 +71,15 @@ class AudioSys {
     if (!AC) return;
     const c = (this.ctx = new AC());
     const comp = c.createDynamicsCompressor();
-    comp.threshold.value = -14; comp.ratio.value = 4;
-    comp.connect(c.destination);
-    this.master = c.createGain(); this.master.gain.value = 0.9; this.master.connect(comp);
-    this.musicBus = c.createGain(); this.musicBus.gain.value = this.settings.music ? 0.5 : 0; this.musicBus.connect(this.master);
-    this.sfxBus = c.createGain(); this.sfxBus.gain.value = this.settings.sfx ? 0.7 : 0; this.sfxBus.connect(this.master);
+    comp.threshold.value = -18; comp.knee.value = 8; comp.ratio.value = 4; comp.attack.value = 0.005; comp.release.value = 0.2;
+    // penguat setelah kompresor agar suara lebih keras, lalu limiter supaya tidak pecah
+    const makeup = c.createGain(); makeup.gain.value = 2.2;
+    const limiter = c.createDynamicsCompressor();
+    limiter.threshold.value = -1.5; limiter.knee.value = 0; limiter.ratio.value = 20; limiter.attack.value = 0.002; limiter.release.value = 0.1;
+    comp.connect(makeup); makeup.connect(limiter); limiter.connect(c.destination);
+    this.master = c.createGain(); this.master.gain.value = 1; this.master.connect(comp);
+    this.musicBus = c.createGain(); this.musicBus.gain.value = this._gain("music"); this.musicBus.connect(this.master);
+    this.sfxBus = c.createGain(); this.sfxBus.gain.value = this._gain("sfx"); this.sfxBus.connect(this.master);
     // gema ringan agar terasa "di bawah air"
     this.verb = c.createConvolver(); this.verb.buffer = this._impulse(2.4);
     const vg = c.createGain(); vg.gain.value = 0.35; this.verb.connect(vg); vg.connect(this.master);
@@ -80,15 +91,18 @@ class AudioSys {
   }
 
   // ---------- pengaturan ----------
-  toggle(kind) {
-    this.settings[kind] = !this.settings[kind];
+  // kurva volume terasa alami: 0–100 → 0–maks (kuadrat)
+  _gain(kind) { const v = this.settings[kind] / 100; return v * v * (kind === "music" ? 0.9 : 1.3); }
+
+  /** Atur volume 0–100 untuk "music" atau "sfx" */
+  setVolume(kind, value) {
+    this.settings[kind] = Math.max(0, Math.min(100, Math.round(value)));
     if (this.ctx) {
       const bus = kind === "music" ? this.musicBus : this.sfxBus;
-      bus.gain.setTargetAtTime(this.settings[kind] ? (kind === "music" ? 0.5 : 0.7) : 0, this.ctx.currentTime, 0.1);
+      bus.gain.setTargetAtTime(this._gain(kind), this.ctx.currentTime, 0.05);
       if (kind === "music") this._syncFile();
     }
     this._save();
-    return this.settings[kind];
   }
 
   setMood(m) {

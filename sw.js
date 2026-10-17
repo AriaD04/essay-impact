@@ -1,6 +1,6 @@
 // Service worker: simpan semua file game agar bisa dimainkan offline
 // setelah dibuka sekali. Naikkan VERSION setiap kali file game diubah.
-const VERSION = "coral-quest-v2";
+const VERSION = "coral-quest-v4";
 const CORE = [
   "./", "index.html", "css/style.css", "manifest.webmanifest", "icons/icon.svg",
   "js/main.js", "js/engine.js", "js/models.js", "js/data.js", "js/ui.js", "js/i18n.js", "js/audio.js", "js/creatures.js",

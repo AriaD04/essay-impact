@@ -15,7 +15,7 @@ GRAYESI SILITONGA (2201020130).
 | 1. Kenali Penghuni Karang | Seret makhluk ke platform perannya, ketuk untuk kartu fakta | 4 makhluk | 10 makhluk |
 | 2. Jaring Makanan Terumbu | Susun rantai makanan dengan timer, lihat aliran energi, kuis "Bagaimana jika" | — | ✔ |
 | 3. Cek Kesehatan Karang | Bandingkan terumbu sehat, memutih, rusak; cari penyebab kerusakan | 3 penyebab | 5 penyebab + kuis |
-| 4. Misi Restorasi | 12 poin aksi untuk memulihkan terumbu, lalu simulasi 5 tahun | ✔ | ✔ |
+| 4. Misi Restorasi | 24 poin aksi untuk memulihkan terumbu, lalu simulasi 5 tahun | ✔ | ✔ |
 
 Setelah semua misi selesai, pemain melihat rapor nilai dan memilih ikrar aksi nyata.
 Nilai tersimpan di browser masing-masing.
@@ -30,7 +30,8 @@ termasuk di tengah misi. Semua teks ada di `js/i18n.js` (bagian `en` dan `id`).
 
 Soundtrack (menu, misi, simulasi), suasana bawah laut, dan semua efek suara dibuat
 langsung oleh kode (`js/audio.js`), jadi tidak butuh file dan tetap jalan offline.
-Tombol 🎵 dan 🔊 di kanan atas untuk mematikan musik atau efek suara.
+Tombol 🎵 atau 🔊 di kanan atas membuka panel **Volume**: musik dan efek suara masing-masing
+bisa diatur 0–100 (0 = mati). Pengaturan tersimpan di browser.
 
 Ingin memakai lagu sendiri? Buat folder `audio/` lalu taruh `menu.mp3`, `play.mp3`,
 dan/atau `sim.mp3`. Game otomatis memutarnya sebagai pengganti musik buatan kode.
