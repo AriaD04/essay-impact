@@ -1,0 +1,19 @@
+{
+  "name": "Coral Quest",
+  "short_name": "CoralQuest",
+  "description": "A 3D educational game about the coral reefs of the Riau Islands.",
+  "start_url": "./index.html",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#04283f",
+  "theme_color": "#04283f",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

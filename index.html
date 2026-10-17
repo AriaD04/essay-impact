@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Coral Quest</title>
+  <meta name="description" content="A 3D educational game about the coral reefs of the Riau Islands, for students and the public." />
+  <meta name="theme-color" content="#04283f" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="importmap">
+    { "imports": { "three": "./js/vendor/three.module.js", "three/addons/": "./js/vendor/addons/" } }
+  </script>
+</head>
+<body>
+  <div id="stage"></div>
+  <div id="labels"></div>
+
+  <!-- HUD saat bermain -->
+  <header id="hud" hidden>
+    <button id="btn-home" class="icon-btn" aria-label="Home">⌂</button>
+    <div class="hud-text">
+      <div id="hud-title"></div>
+      <div id="hud-obj"></div>
+    </div>
+    <div class="hud-right">
+      <div id="hud-timer" hidden></div>
+      <div id="hud-score" hidden></div>
+    </div>
+  </header>
+  <div id="hud-actions"></div>
+
+  <!-- Tombol bahasa & suara (selalu tampil) -->
+  <div id="sys">
+    <button id="sys-lang" class="sys-btn" data-i18n-title="sys.lang"><span class="globe">🌐</span><span class="code">EN</span></button>
+    <button id="sys-music" class="sys-btn" data-i18n-title="sys.music">🎵</button>
+    <button id="sys-sfx" class="sys-btn" data-i18n-title="sys.sfx">🔊</button>
+  </div>
+
+  <!-- Layar judul -->
+  <section id="screen-title" class="screen" hidden>
+    <div class="title-wrap">
+      <div class="badge" data-i18n="app.badge"></div>
+      <h1>Coral<br /><span>Quest</span></h1>
+      <p class="lead" data-i18n="app.lead"></p>
+      <div class="mode-pick">
+        <button class="mode" data-mode="quick">
+          <span class="mode-icon">⚡</span>
+          <span class="mode-name" data-i18n="mode.quick.name"></span>
+          <span class="mode-desc" data-i18n="mode.quick.desc"></span>
+        </button>
+        <button class="mode" data-mode="class">
+          <span class="mode-icon">🎓</span>
+          <span class="mode-name" data-i18n="mode.class.name"></span>
+          <span class="mode-desc" data-i18n="mode.class.desc"></span>
+        </button>
+      </div>
+      <div class="lang-pick" role="group" aria-labelledby="lang-label">
+        <span id="lang-label" class="lang-label">🌐 <span data-i18n="lang.label"></span></span>
+        <div class="seg">
+          <button data-lang="en" aria-pressed="true">English</button>
+          <button data-lang="id" aria-pressed="false">Bahasa Indonesia</button>
+        </div>
+      </div>
+      <button id="btn-about" class="link-btn" data-i18n="about.btn"></button>
+    </div>
+  </section>
+
+  <!-- Peta misi -->
+  <section id="screen-map" class="screen" hidden>
+    <div class="map-wrap">
+      <button class="link-btn back" data-go="title" data-i18n="map.back"></button>
+      <h2 data-i18n="map.title"></h2>
+      <p class="sub" data-i18n="map.sub"></p>
+      <div id="level-list"></div>
+      <button id="btn-finish" class="btn primary" data-i18n="map.finish" hidden></button>
+    </div>
+  </section>
+
+  <!-- Hasil akhir -->
+  <section id="screen-result" class="screen" hidden>
+    <div class="result-wrap" id="result-body"></div>
+  </section>
+
+  <aside id="card" hidden></aside>
+  <div id="modal" hidden></div>
+  <div id="toasts"></div>
+  <div id="loading"><div class="spinner"></div><div data-i18n="loading">Diving in…</div></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
